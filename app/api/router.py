@@ -11,3 +11,14 @@ v1_router = APIRouter(
     dependencies=[Depends(require_bearer), Depends(enforce_content_length)],
 )
 v1_router.include_router(reviews.router)
+
+
+@v1_router.api_route(
+    "/{full_path:path}",
+    methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"],
+)
+async def v1_catch_all(full_path: str) -> None:
+    """Ensures every /v1/* request (any path, any method) matches a route
+    within this router, so require_bearer runs before Starlette would
+    otherwise 404/405 an unmatched path or method without checking auth."""
+    raise HTTPException(status_code=404, detail="Not found")
