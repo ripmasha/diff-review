@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     service_token: str
+    gemini_api_key: str | None = None
+    gemini_model: str = "gemini-3.6-flash"
 
 
 @lru_cache
