@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for diff-review on 2026-08-16T19:34:54Z
+# fly.toml app configuration file generated for diff-review on 2026-08-16T19:37:45Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = 'diff-review'
-primary_region = 'ams'
+primary_region = 'fra'
 
 [http_service]
   auto_start_machines = true
