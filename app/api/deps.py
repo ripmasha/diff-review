@@ -20,17 +20,19 @@ def require_bearer(request: Request) -> None:
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
-def enforce_content_length(request: Request) -> None:
+async def enforce_content_length(request: Request) -> None:
     raw = request.headers.get("content-length")
-    if raw is None:
-        return
+    if raw is not None:
+        try:
+            length = int(raw)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Invalid Content-Length header")
 
-    try:
-        length = int(raw)
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid Content-Length header")
+        if length > MAX_PAYLOAD_BYTES:
+            raise HTTPException(
+                status_code=413, detail=f"Payload exceeds {MAX_PAYLOAD_BYTES} bytes"
+            )
 
-    if length > MAX_PAYLOAD_BYTES:
-        raise HTTPException(
-            status_code=413, detail=f"Payload exceeds {MAX_PAYLOAD_BYTES} bytes"
-        )
+    body = await request.body()
+    if len(body) > MAX_PAYLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="Payload exceeds maximum size")
