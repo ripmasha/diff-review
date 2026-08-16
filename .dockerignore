@@ -1,0 +1,10 @@
+.git
+.env
+.env.example
+tests
+__pycache__
+*.pyc
+.pytest_cache
+README.md
+CANDIDATE-TASK.md
+CLAUDE.md
