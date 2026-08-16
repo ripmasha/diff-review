@@ -1,0 +1,21 @@
+# fly.toml app configuration file generated for diff-review on 2026-08-16T19:34:54Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'diff-review'
+primary_region = 'ams'
+
+[http_service]
+  auto_start_machines = true
+  auto_stop_machines = 'off'
+  force_https = true
+  internal_port = 8000
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory = '1gb'
+  memory_mb = 256
