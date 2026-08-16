@@ -26,6 +26,27 @@ def auth() -> dict[str, str]:
     return {"Authorization": f"Bearer {TOKEN}"}
 
 
+@pytest.fixture
+def anyio_backend() -> str:
+    return "asyncio"
+
+
+@pytest.fixture(autouse=True)
+def _reset_singletons():
+    from app.core.jobs import get_job_store
+    from app.core.ratelimit import get_rate_limiter
+
+    store = get_job_store()
+    store._jobs.clear()
+    store._cache_index.clear()
+    store._idempotency_index.clear()
+
+    bucket = get_rate_limiter()
+    bucket._tokens = bucket._capacity
+
+    yield
+
+
 def assert_envelope(response, code: str) -> None:
     body = response.json()
     assert set(body) == {"error"}
